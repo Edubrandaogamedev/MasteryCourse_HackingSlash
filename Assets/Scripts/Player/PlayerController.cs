@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public bool Initialized => Controller != null;
     public int PlayerNumber => playerNumber;
     public Controller Controller { get; private set;}
+    
+    public Character CharacterPrefab { get; set; }
 
     private void Awake()
     {
@@ -25,6 +27,11 @@ public class PlayerController : MonoBehaviour
         DebugHelper(controller);
     }
 
+    public void SpawnCharacter()
+    {
+        var character = Instantiate(CharacterPrefab, new Vector3(10, 0, 12),Quaternion.identity);
+        character.SetController(Controller);
+    }
     private void DebugHelper(Controller controller)
     {
         gameObject.name = $"Player{playerNumber} - {controller.gameObject.name}";

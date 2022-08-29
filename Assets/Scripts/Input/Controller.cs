@@ -26,6 +26,10 @@ public class Controller : MonoBehaviour
             vertical = Input.GetAxis(verticalAxis);
         }
     }
+    private void DebugHelper(int controllerIndex)
+    {
+        gameObject.name = "Controller" + controllerIndex;
+    }
     public void SetIndex(int index)
     {
         Index = index;
@@ -39,8 +43,9 @@ public class Controller : MonoBehaviour
         return attack;
     }
 
-    private void DebugHelper(int controllerIndex)
+    public Vector3 GetDirection()
     {
-        gameObject.name = "Controller" + controllerIndex;
+        return new Vector3(horizontal, 0, -vertical);
     }
+
 }

@@ -1913,6 +1913,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89e1c6cf6b41c9f499d2e68ef15db988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterPrefab: {fileID: 8865363687300611301, guid: daf2d3f29568dea4dba134eecfb773c2,
+    type: 3}
 --- !u!1 &2074548639
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,6 +2005,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89e1c6cf6b41c9f499d2e68ef15db988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterPrefab: {fileID: 3753397232047456016, guid: dcbe6237ee4ea4746b96a7b98acb4357,
+    type: 3}
 --- !u!1001 &5255811606628005403
 PrefabInstance:
   m_ObjectHideFlags: 0
