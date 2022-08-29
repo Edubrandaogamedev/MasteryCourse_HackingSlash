@@ -2,15 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private int playerNumber;
     
-    private Controller _controller;
     private UIPlayerText uiPlayerText;
-    public bool Initialized => _controller != null;
+    public bool Initialized => Controller != null;
     public int PlayerNumber => playerNumber;
+    public Controller Controller { get; private set;}
 
     private void Awake()
     {
@@ -19,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
     public void InitializePlayer(Controller controller)
     {
-        this._controller = controller;
+        Controller = controller;
         uiPlayerText.HandlePlayerInitialized();
         DebugHelper(controller);
     }
