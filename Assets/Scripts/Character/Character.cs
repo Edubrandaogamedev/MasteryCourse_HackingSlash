@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, IAttack, ITakeHit
 {
+    public static List<Character> All = new List<Character>();
+    
     private Controller controller;
     
     private Animator animator;
@@ -13,9 +16,29 @@ public class Character : MonoBehaviour
     
     [SerializeField] private float attackOffset = 1f;
     [SerializeField] private float radius = 1f;
+    [SerializeField] private int damage = 1;
+
+    [SerializeField] private int maxHealth = 10;
+    
+    private int currentHealth;
     
     private Collider[] attackResults;
     private AnimationImpactWatcher animationImpactWatcher;
+
+    public int Damage => damage;
+
+    private void OnEnable()
+    {
+        currentHealth = maxHealth;
+        if (!All.Contains(this))
+            All.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        if (All.Contains(this))
+            All.Remove(this);
+    }
 
     private void Awake()
     {
@@ -69,5 +92,10 @@ public class Character : MonoBehaviour
             if (takeHit != null)
                 takeHit.TakeHit(this);
         }
+    }
+
+    public void TakeHit(IAttack hitBy)
+    {
+        currentHealth -= hitBy.Damage;   
     }
 }
