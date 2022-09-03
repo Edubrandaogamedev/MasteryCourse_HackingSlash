@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3753397232047456015}
   - component: {fileID: 3753397232047456016}
+  - component: {fileID: 703523668532227684}
   m_Layer: 0
   m_Name: Wizard
   m_TagString: Untagged
@@ -46,6 +47,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
+  damage: 1
+  maxHealth: 10
+--- !u!114 &703523668532227684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3753397232047456017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff8ab965f3c4cd49f4c63a11d1c91dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  attackRate: 1
+  attackOffset: 1
+  radius: 1
 --- !u!1001 &4583083422294043894
 PrefabInstance:
   m_ObjectHideFlags: 0

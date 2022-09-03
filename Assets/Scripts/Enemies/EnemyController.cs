@@ -5,9 +5,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyController : MonoBehaviour, ITakeHit , IAttack
+public class EnemyController : PooledMonoBehaviour, ITakeHit , IAttack
 {
-    [SerializeField] private GameObject impactParticle;
+    [SerializeField] private PooledMonoBehaviour impactParticle;
     
     [SerializeField] private int maxHealth = 3;
     private int currentHealth;
@@ -40,9 +40,11 @@ public class EnemyController : MonoBehaviour, ITakeHit , IAttack
     {
         navMeshAgent.isStopped = true;
         animator.SetTrigger((int) DieAnim);
-        Destroy(gameObject, 3);
-        
+        ReturnToPool(3);
+
     }
+
+
     private void Update()
     {
         if (IsDead) return;
@@ -63,7 +65,6 @@ public class EnemyController : MonoBehaviour, ITakeHit , IAttack
             }
         }
     }
-
     private void AdquireTarget()
     {
         target = Character.All
@@ -91,7 +92,7 @@ public class EnemyController : MonoBehaviour, ITakeHit , IAttack
     public void TakeHit(IAttack hitBy)
     {
         currentHealth--;
-        Instantiate(impactParticle, transform.position + (Vector3.up * 2), Quaternion.identity);
+        impactParticle.Get<PooledMonoBehaviour>(transform.position + (Vector3.up * 2), Quaternion.identity);
         if (currentHealth <= 0)
             Die();
         else

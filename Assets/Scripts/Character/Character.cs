@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Character : MonoBehaviour, IAttack, ITakeHit
+public class Character : MonoBehaviour, ITakeHit
 {
     public static List<Character> All = new List<Character>();
     
@@ -14,16 +13,16 @@ public class Character : MonoBehaviour, IAttack, ITakeHit
     
     [SerializeField] private float movementSpeed = 5f;
     
-    [SerializeField] private float attackOffset = 1f;
-    [SerializeField] private float radius = 1f;
+    
     [SerializeField] private int damage = 1;
 
     [SerializeField] private int maxHealth = 10;
     
     private int currentHealth;
     
-    private Collider[] attackResults;
+    
     private AnimationImpactWatcher animationImpactWatcher;
+    private Attacker attacker;
 
     public int Damage => damage;
 
@@ -42,16 +41,8 @@ public class Character : MonoBehaviour, IAttack, ITakeHit
 
     private void Awake()
     {
+        attacker = GetComponent<Attacker>();
         animator = GetComponentInChildren<Animator>();
-        attackResults = new Collider[10];
-
-        animationImpactWatcher = GetComponentInChildren<AnimationImpactWatcher>();
-        animationImpactWatcher.OnImpact += AnimationImpactWatcher_OnImpact;
-    }
-
-    private void OnDestroy()
-    {
-        animationImpactWatcher.OnImpact -= AnimationImpactWatcher_OnImpact;
     }
     public void SetController(Controller controller)
     {
@@ -75,25 +66,10 @@ public class Character : MonoBehaviour, IAttack, ITakeHit
 
         if (controller.attackPressed)
         {
-            animator.SetTrigger(AttackAnim);
+            if (attacker.CanAttack)
+                animator.SetTrigger(AttackAnim);
         }
     }
-    /// <summary>
-    /// Called by animation event via AnimationImpactWatcher
-    /// </summary>
-    private void AnimationImpactWatcher_OnImpact()
-    {
-        
-        var position = transform.position + transform.forward * attackOffset;
-        int hitCount = Physics.OverlapSphereNonAlloc(position, radius, attackResults);
-        for (int i = 0; i < hitCount; i++)
-        {
-            var takeHit = attackResults[i].GetComponent<ITakeHit>();
-            if (takeHit != null)
-                takeHit.TakeHit(this);
-        }
-    }
-
     public void TakeHit(IAttack hitBy)
     {
         currentHealth -= hitBy.Damage;   
