@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8865363687300611322}
   - component: {fileID: 8865363687300611301}
   - component: {fileID: 6705527289776217411}
+  - component: {fileID: 1924349796019243251}
   m_Layer: 0
   m_Name: Viking
   m_TagString: Untagged
@@ -65,6 +66,20 @@ MonoBehaviour:
   attackRate: 1
   attackOffset: 1
   radius: 1
+--- !u!114 &1924349796019243251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8865363687300611300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bac85b6c465385644bc5d159805af4f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathParticlePrefab: {fileID: 11400004, guid: 7867af58a6ec48846ae807eb4022fbaa,
+    type: 3}
 --- !u!1001 &8148180369622381485
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyController : PooledMonoBehaviour, ITakeHit , IAttack
+public class EnemyController : PooledMonoBehaviour, ITakeHit , IDie
 {
     [SerializeField] private PooledMonoBehaviour impactParticle;
     
@@ -24,6 +24,9 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IAttack
 
     private bool IsDead => currentHealth <= 0;
     public int Damage => 1;
+    
+    public event Action<int, int> OnHealthChanged = delegate {  };
+    public event Action<IDie> OnDied = delegate {  };
 
     private void Awake()
     {
@@ -31,20 +34,10 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IAttack
         navMeshAgent = GetComponent<NavMeshAgent>();
         attacker = GetComponent<Attacker>();
     }
-
     private void OnEnable()
     {
         currentHealth = maxHealth;
     }
-    private void Die()
-    {
-        navMeshAgent.isStopped = true;
-        animator.SetTrigger((int) DieAnim);
-        ReturnToPool(3);
-
-    }
-
-
     private void Update()
     {
         if (IsDead) return;
@@ -64,6 +57,13 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IAttack
                 TryAttack();
             }
         }
+    }
+    private void Die()
+    {
+        navMeshAgent.isStopped = true;
+        animator.SetTrigger((int) DieAnim);
+        OnDied(this);
+        ReturnToPool(3);
     }
     private void AdquireTarget()
     {
@@ -92,6 +92,7 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IAttack
     public void TakeHit(IAttack hitBy)
     {
         currentHealth--;
+        OnHealthChanged(currentHealth, maxHealth);
         impactParticle.Get<PooledMonoBehaviour>(transform.position + (Vector3.up * 2), Quaternion.identity);
         if (currentHealth <= 0)
             Die();
@@ -100,4 +101,6 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IAttack
             animator.SetTrigger(HitAnim);
         }
     }
+
+    
 }
