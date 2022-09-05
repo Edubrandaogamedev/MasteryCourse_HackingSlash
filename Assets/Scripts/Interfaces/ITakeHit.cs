@@ -1,4 +1,10 @@
-﻿public interface ITakeHit
+﻿using System;
+using UnityEngine;
+
+public interface ITakeHit
 {
-    void TakeHit(IAttack hitBy);
+    Transform transform { get; }
+    bool Alive { get; }
+    void TakeHit(IDamage hitBy);
+    event Action OnHit;
 }

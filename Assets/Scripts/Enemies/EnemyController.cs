@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyController : PooledMonoBehaviour, ITakeHit , IDie
+public class EnemyController : PooledMonoBehaviour, ITakeHit ,IDie
 {
-    [SerializeField] private PooledMonoBehaviour impactParticle;
-    
     [SerializeField] private int maxHealth = 3;
     private int currentHealth;
 
@@ -23,11 +19,12 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IDie
     private Attacker attacker;
 
     private bool IsDead => currentHealth <= 0;
+    public bool Alive { get; private set; }
     public int Damage => 1;
     
     public event Action<int, int> OnHealthChanged = delegate {  };
     public event Action<IDie> OnDied = delegate {  };
-
+    public event Action OnHit = delegate {  };
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -37,18 +34,18 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IDie
     private void OnEnable()
     {
         currentHealth = maxHealth;
+        Alive = true;
     }
     private void Update()
     {
         if (IsDead) return;
-        if (target == null)
+        if (target == null || !target.Alive)
         {
             AdquireTarget();
         }
         else
         {
-            var distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance > 2)
+            if (!attacker.InAttackRange(target))
             {
                 FollowTarget();
             }
@@ -60,6 +57,7 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IDie
     }
     private void Die()
     {
+        Alive = false;
         navMeshAgent.isStopped = true;
         animator.SetTrigger((int) DieAnim);
         OnDied(this);
@@ -89,11 +87,12 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IDie
         attacker.Attack(target);
     }
 
-    public void TakeHit(IAttack hitBy)
+
+    public void TakeHit(IDamage hitBy)
     {
-        currentHealth--;
+        currentHealth-= hitBy.Damage;
         OnHealthChanged(currentHealth, maxHealth);
-        impactParticle.Get<PooledMonoBehaviour>(transform.position + (Vector3.up * 2), Quaternion.identity);
+        OnHit();
         if (currentHealth <= 0)
             Die();
         else
@@ -102,5 +101,4 @@ public class EnemyController : PooledMonoBehaviour, ITakeHit , IDie
         }
     }
 
-    
 }

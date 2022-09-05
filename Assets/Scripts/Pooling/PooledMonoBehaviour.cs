@@ -9,7 +9,7 @@ public class PooledMonoBehaviour : MonoBehaviour
     public event Action<PooledMonoBehaviour> OnReturnToPool;
     public int InitialPoolSize => initialPoolSize;
     
-    private void OnDisable()
+    protected  virtual void OnDisable()
     {
         OnReturnToPool?.Invoke(this);
     }
@@ -19,7 +19,7 @@ public class PooledMonoBehaviour : MonoBehaviour
         yield return new WaitForSeconds(delay);
         gameObject.SetActive(false);
     }
-    protected void ReturnToPool(float delay)
+    protected void ReturnToPool(float delay = 0)
     {
         StartCoroutine(ReturnToPoolAfterSeconds(delay));
     }

@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-
-public interface IAttack
+﻿public interface IAttack : IDamage
 {
-    int Damage { get;}
-    Transform transform { get; }
+    bool CanAttack { get;}
+    void Attack();
 }

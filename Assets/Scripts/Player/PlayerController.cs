@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     public void SpawnCharacter()
     {
-        var character = Instantiate(CharacterPrefab, new Vector3(10, 0, 12),Quaternion.identity);
+        var character = CharacterPrefab.Get<Character>(new Vector3(10, 0, 12),Quaternion.identity);
         character.SetController(Controller);
         character.OnDied += OnPlayerDied;
         OnCharacterChanged(character);
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private void OnPlayerDied(IDie character)
     {
         character.OnDied -= OnPlayerDied;
-        Destroy(character.gameObject);
+        character.gameObject.SetActive(false);
         StartCoroutine(RespawAfterDelay());
     }
 
